@@ -108,14 +108,18 @@
   .texto .destaque{font-weight:600}
   .clausulas{margin:1.2em 0}
   .clausula{
-    display:grid;grid-template-columns:auto 1fr;gap:14px;
+    display:grid;grid-template-columns:1fr;gap:5px;
     padding:14px 0;border-top:1px dotted var(--linha);
   }
   .clausula:last-child{border-bottom:1px dotted var(--linha)}
   .clausula .rotulo{
     font-family:'Special Elite',monospace;
     font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--carimbo-azul);padding-top:5px;white-space:nowrap;
+    color:var(--carimbo-azul);
+  }
+  @media(min-width:561px){
+    .clausula{grid-template-columns:158px 1fr;gap:14px}
+    .clausula .rotulo{padding-top:5px;white-space:nowrap}
   }
   .clausula p{margin:0;font-size:.98rem}
 
