@@ -165,10 +165,6 @@
   input:focus, textarea:focus, select:focus{
     outline:2px solid var(--carimbo-azul);outline-offset:3px;
   }
-  .linha-dupla{display:grid;grid-template-columns:2fr 1fr;gap:22px;align-items:end}
-  @media(min-width:521px){.linha-dupla label{min-height:2.4rem}}
-  @media(max-width:520px){.linha-dupla{grid-template-columns:1fr;gap:0}.linha-dupla label{min-height:0}}
-
   /* escolha segmentada Sim/Não */
   .campo-escolha{margin-top:22px}
   .escolha-label{
@@ -187,11 +183,18 @@
   .escolha label:last-of-type{border-left:1.5px solid var(--tinta)}
   .escolha input:checked + label{background:var(--tinta);color:var(--papel);font-weight:600}
   #dueloSim:checked + label{background:var(--carimbo);color:#fff}
-  #barbaSim:checked + label{background:var(--carimbo-azul);color:#fff}
+  #karaokeSim:checked + label{background:var(--chopp);color:#fff}
+  #thiagoSim:checked + label{background:var(--carimbo-azul);color:#fff}
   .escolha input:focus-visible + label{outline:2px solid var(--carimbo-azul);outline-offset:-2px}
+
+  .instrucao{
+    text-align:center;font-style:italic;font-size:.9rem;
+    color:var(--tinta-suave);margin:-10px 0 22px;
+  }
 
   /* enquete de resultados */
   .enquete{margin-top:26px;border-top:1px dotted var(--linha);padding-top:18px}
+  .enquete-bloco + .enquete-bloco{margin-top:22px}
   .enquete h3{
     font-family:'Special Elite',monospace;font-size:.78rem;
     letter-spacing:.2em;text-transform:uppercase;text-align:center;
@@ -203,6 +206,10 @@
   .voto-cap{display:block;font-family:'Special Elite',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-suave);margin-top:6px}
   .voto-sim .voto-num{color:var(--carimbo-azul)}
   .voto-nao .voto-num{color:var(--carimbo)}
+  .bebida-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:420px){.bebida-grid{grid-template-columns:repeat(2,1fr)}}
+  .bebida-item{border:1.5px solid var(--tinta);padding:10px 6px;text-align:center}
+  .bebida-num{display:block;font-family:'Libre Caslon Text',serif;font-size:1.5rem;font-weight:700;line-height:1;color:var(--chopp)}
 
   button.confirmar{
     display:block;width:100%;margin-top:26px;
@@ -354,21 +361,20 @@
 
       <h2>Confirmação de Presença</h2>
       <p class="prazo" id="prazo">Prazo protocolar: 15 de julho</p>
+      <p class="instrucao">Atenção do cartório: <b>um cadastro por pessoa</b>. Cada convidado protocola a própria presença — não confirme pelos outros.</p>
 
       <form id="formRsvp" novalidate>
-        <div class="linha-dupla">
-          <div>
-            <label for="nome">Nome do(a) cidadão(ã)</label>
-            <input type="text" id="nome" maxlength="60" autocomplete="name" placeholder="Como consta nos autos" required>
-          </div>
-          <div>
-            <label for="acomp">Total de pessoas (você incluso)</label>
-            <input type="number" id="acomp" min="1" max="15" value="1" required>
-          </div>
-        </div>
+        <label for="nome">Nome do(a) cidadão(ã)</label>
+        <input type="text" id="nome" maxlength="60" autocomplete="name" placeholder="Como consta nos autos" required>
 
-        <label for="obs">Observações ao conselho <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
-        <textarea id="obs" maxlength="200" placeholder="Restrições alimentares, pedidos de música não homologada, etc."></textarea>
+        <label for="bebida">No bar, você é do time do…</label>
+        <select id="bebida">
+          <option value="" selected>Selecione (opcional)</option>
+          <option value="cerveja">🍺 Cerveja</option>
+          <option value="drinks">🍸 Drinks</option>
+          <option value="ambos">Os dois</option>
+          <option value="nao">Não bebo</option>
+        </select>
 
         <div class="campo-escolha">
           <span class="escolha-label">Disputa o título de quem bebe mais que o Gustavo Falcão?</span>
@@ -381,14 +387,27 @@
         </div>
 
         <div class="campo-escolha">
-          <span class="escolha-label">Aposta do conselho: o Thiago Bóbbo vai aparecer de barba?</span>
-          <div class="escolha" role="radiogroup" aria-label="Aposta da barba do Thiago Bóbbo">
-            <input type="radio" name="barba" id="barbaSim" value="sim">
-            <label for="barbaSim">🧔 Sim, de barba</label>
-            <input type="radio" name="barba" id="barbaNao" value="nao">
-            <label for="barbaNao">Não, vai raspar</label>
+          <span class="escolha-label">Você é a favor da competição de karaokê?</span>
+          <div class="escolha" role="radiogroup" aria-label="Competição de karaokê">
+            <input type="radio" name="karaoke" id="karaokeSim" value="sim">
+            <label for="karaokeSim">🎤 A favor</label>
+            <input type="radio" name="karaoke" id="karaokeNao" value="nao">
+            <label for="karaokeNao">Sou contra</label>
           </div>
         </div>
+
+        <div class="campo-escolha">
+          <span class="escolha-label">Aposta do conselho: o Thiago Bóbbo vai aparecer?</span>
+          <div class="escolha" role="radiogroup" aria-label="Aposta se o Thiago Bóbbo vai aparecer">
+            <input type="radio" name="thiago" id="thiagoSim" value="sim">
+            <label for="thiagoSim">🎭 Vai aparecer</label>
+            <input type="radio" name="thiago" id="thiagoNao" value="nao">
+            <label for="thiagoNao">Vai furar</label>
+          </div>
+        </div>
+
+        <label for="obs">Observações ao conselho <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+        <textarea id="obs" maxlength="200" placeholder="Restrições alimentares, pedidos de música não homologada, etc."></textarea>
 
         <button type="submit" class="confirmar" id="btnConfirmar">Protocolar presença</button>
         <p class="erro" id="erro"></p>
@@ -402,10 +421,28 @@
         <p class="vazio" id="vazio" style="display:none">Nenhuma confirmação protocolada ainda. Seja a jurisprudência.</p>
 
         <div class="enquete" id="enquete" style="display:none">
-          <h3>Aposta: o Thiago Bóbbo vai de barba?</h3>
-          <div class="enquete-barras">
-            <div class="voto voto-sim"><span class="voto-num" id="barbaSimNum">0</span><span class="voto-cap">🧔 Sim, de barba</span></div>
-            <div class="voto voto-nao"><span class="voto-num" id="barbaNaoNum">0</span><span class="voto-cap">Não, vai raspar</span></div>
+          <div class="enquete-bloco" id="blocoThiago" style="display:none">
+            <h3>Aposta: o Thiago Bóbbo vai aparecer?</h3>
+            <div class="enquete-barras">
+              <div class="voto voto-sim"><span class="voto-num" id="thiagoSimNum">0</span><span class="voto-cap">🎭 Vai aparecer</span></div>
+              <div class="voto voto-nao"><span class="voto-num" id="thiagoNaoNum">0</span><span class="voto-cap">Vai furar</span></div>
+            </div>
+          </div>
+          <div class="enquete-bloco" id="blocoKaraoke" style="display:none">
+            <h3>Competição de karaokê</h3>
+            <div class="enquete-barras">
+              <div class="voto voto-sim"><span class="voto-num" id="karaokeSimNum">0</span><span class="voto-cap">🎤 A favor</span></div>
+              <div class="voto voto-nao"><span class="voto-num" id="karaokeNaoNum">0</span><span class="voto-cap">Contra</span></div>
+            </div>
+          </div>
+          <div class="enquete-bloco" id="blocoBebida" style="display:none">
+            <h3>No bar</h3>
+            <div class="bebida-grid">
+              <div class="bebida-item"><span class="bebida-num" id="bebCerveja">0</span><span class="voto-cap">🍺 Cerveja</span></div>
+              <div class="bebida-item"><span class="bebida-num" id="bebDrinks">0</span><span class="voto-cap">🍸 Drinks</span></div>
+              <div class="bebida-item"><span class="bebida-num" id="bebAmbos">0</span><span class="voto-cap">Os dois</span></div>
+              <div class="bebida-item"><span class="bebida-num" id="bebNao">0</span><span class="voto-cap">Não bebe</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -431,14 +468,15 @@
 
   const form = document.getElementById('formRsvp');
   const nome = document.getElementById('nome');
-  const acomp = document.getElementById('acomp');
+  const bebida = document.getElementById('bebida');
   const obs = document.getElementById('obs');
   const dueloSim = document.getElementById('dueloSim');
-  const barbaSim = document.getElementById('barbaSim');
-  const barbaNao = document.getElementById('barbaNao');
+  const karaokeSim = document.getElementById('karaokeSim');
+  const karaokeNao = document.getElementById('karaokeNao');
+  const thiagoSim = document.getElementById('thiagoSim');
+  const thiagoNao = document.getElementById('thiagoNao');
   const enquete = document.getElementById('enquete');
-  const barbaSimNum = document.getElementById('barbaSimNum');
-  const barbaNaoNum = document.getElementById('barbaNaoNum');
+  const el = id => document.getElementById(id);
   const btn = document.getElementById('btnConfirmar');
   const erro = document.getElementById('erro');
   const lista = document.getElementById('lista');
@@ -462,14 +500,16 @@
 
   async function carregarConfirmados(){
     try{
-      const res = await fetch(API + '?select=nome,pessoas,duelo,barba,criado_em&order=criado_em.asc', { headers: HEADERS });
+      const res = await fetch(API + '?select=nome,pessoas,duelo,thiago,karaoke,bebida,criado_em&order=criado_em.asc', { headers: HEADERS });
       if(!res.ok) throw new Error('HTTP ' + res.status);
       const dados = await res.json();
       const registros = dados.map(r => ({
         nome: r.nome,
         pessoas: r.pessoas,
         duelo: r.duelo,
-        barba: r.barba,
+        thiago: r.thiago,
+        karaoke: r.karaoke,
+        bebida: r.bebida,
         criadoEm: new Date(r.criado_em).getTime()
       }));
       renderizar(registros);
@@ -479,12 +519,36 @@
     }
   }
 
+  const BEBIDA_EMOJI = { cerveja:'🍺', drinks:'🍸', ambos:'🍺🍸', nao:'🚫' };
+
   function renderizarEnquete(registros){
-    const sim = registros.filter(r => r.barba === true).length;
-    const nao = registros.filter(r => r.barba === false).length;
-    barbaSimNum.textContent = String(sim);
-    barbaNaoNum.textContent = String(nao);
-    enquete.style.display = (sim + nao) > 0 ? 'block' : 'none';
+    // Thiago vai aparecer?
+    const tSim = registros.filter(r => r.thiago === true).length;
+    const tNao = registros.filter(r => r.thiago === false).length;
+    el('thiagoSimNum').textContent = String(tSim);
+    el('thiagoNaoNum').textContent = String(tNao);
+    el('blocoThiago').style.display = (tSim + tNao) > 0 ? 'block' : 'none';
+
+    // Karaokê a favor/contra
+    const kSim = registros.filter(r => r.karaoke === true).length;
+    const kNao = registros.filter(r => r.karaoke === false).length;
+    el('karaokeSimNum').textContent = String(kSim);
+    el('karaokeNaoNum').textContent = String(kNao);
+    el('blocoKaraoke').style.display = (kSim + kNao) > 0 ? 'block' : 'none';
+
+    // Bebida
+    const bCerveja = registros.filter(r => r.bebida === 'cerveja').length;
+    const bDrinks = registros.filter(r => r.bebida === 'drinks').length;
+    const bAmbos = registros.filter(r => r.bebida === 'ambos').length;
+    const bNao = registros.filter(r => r.bebida === 'nao').length;
+    el('bebCerveja').textContent = String(bCerveja);
+    el('bebDrinks').textContent = String(bDrinks);
+    el('bebAmbos').textContent = String(bAmbos);
+    el('bebNao').textContent = String(bNao);
+    el('blocoBebida').style.display = (bCerveja + bDrinks + bAmbos + bNao) > 0 ? 'block' : 'none';
+
+    const algum = (tSim+tNao) > 0 || (kSim+kNao) > 0 || (bCerveja+bDrinks+bAmbos+bNao) > 0;
+    enquete.style.display = algum ? 'block' : 'none';
   }
 
   function renderizar(registros){
@@ -502,9 +566,12 @@
       const pessoas = Math.max(1, parseInt(r.pessoas,10) || 1);
       totalPessoas += pessoas;
       const li = document.createElement('li');
-      const extras = pessoas > 1 ? `+${pessoas-1} acompanhante${pessoas-1>1?'s':''}` : 'solo';
+      const partes = [];
+      if(r.bebida && BEBIDA_EMOJI[r.bebida]) partes.push(BEBIDA_EMOJI[r.bebida]);
+      if(pessoas > 1) partes.push(`+${pessoas-1} acompanhante${pessoas-1>1?'s':''}`);
+      if(r.duelo) partes.push('<span class="duelo">⚔️ desafia o Falcão</span>');
       li.innerHTML = `<span class="nome">${escapar(r.nome)}</span>
-        <span class="meta">${extras}${r.duelo ? ' · <span class="duelo">⚔️ desafia o Falcão</span>' : ''}</span>`;
+        <span class="meta">${partes.join(' · ')}</span>`;
       lista.appendChild(li);
     }
     contador.firstChild.textContent = String(totalPessoas);
@@ -514,16 +581,16 @@
   form.addEventListener('submit', async function(ev){
     ev.preventDefault();
     const n = nome.value.trim();
-    const p = parseInt(acomp.value,10);
     if(!n){ mostrarErro('O conselho exige um nome para os autos.'); nome.focus(); return; }
-    if(!p || p < 1 || p > 15){ mostrarErro('Informe entre 1 e 15 pessoas. Acima disso, protocolar ofício separado.'); acomp.focus(); return; }
 
     const registro = {
       nome: n.slice(0,60),
-      pessoas: p,
+      pessoas: 1,
       obs: obs.value.trim().slice(0,200),
+      bebida: bebida.value || null,
       duelo: dueloSim.checked,
-      barba: barbaSim.checked ? true : (barbaNao.checked ? false : null)
+      karaoke: karaokeSim.checked ? true : (karaokeNao.checked ? false : null),
+      thiago: thiagoSim.checked ? true : (thiagoNao.checked ? false : null)
     };
 
     btn.disabled = true;
@@ -548,7 +615,6 @@
     setTimeout(()=>{ stamp.classList.remove('ativo'); }, 2600);
 
     form.reset();
-    acomp.value = 1;
     btn.disabled = false;
     btn.textContent = 'Protocolar presença';
     await carregarConfirmados();
