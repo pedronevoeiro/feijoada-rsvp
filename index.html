@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edital Nº 002 — Segunda Feijoada na Fazenda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papel:#f3ead8;
+    --papel-sombra:#e6dbc4;
+    --tinta:#26221c;
+    --tinta-suave:#5b5344;
+    --carimbo:#a32020;
+    --carimbo-azul:#1e3a5f;
+    --chopp:#c98a1b;
+    --feijao:#2b1e17;
+    --linha:#c9bb9e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--feijao);
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(201,138,27,.08), transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(163,32,32,.06), transparent 50%);
+    font-family:'Spectral',Georgia,serif;
+    color:var(--tinta);
+    padding:32px 14px 80px;
+    line-height:1.6;
+  }
+  .documento{
+    max-width:760px;
+    margin:0 auto;
+    background:var(--papel);
+    background-image:
+      repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.012) 2px 4px),
+      radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.5), transparent 60%);
+    box-shadow:0 1px 2px rgba(0,0,0,.4), 0 18px 60px rgba(0,0,0,.55);
+    position:relative;
+    padding:0;
+  }
+  .documento::before, .documento::after{
+    content:"";
+    position:absolute; left:0; right:0; height:14px;
+    background-image:linear-gradient(135deg, var(--papel) 8px, transparent 0), linear-gradient(225deg, var(--papel) 8px, transparent 0);
+    background-size:16px 14px;
+    background-repeat:repeat-x;
+  }
+  .documento::before{top:-13px; transform:rotate(180deg)}
+  .documento::after{bottom:-13px}
+
+  .moldura{
+    border:2px solid var(--tinta);
+    outline:1px solid var(--tinta);
+    outline-offset:5px;
+    margin:22px;
+    padding:clamp(24px,5vw,56px) clamp(18px,5.5vw,60px);
+  }
+
+  .eyebrow{
+    font-family:'Special Elite',monospace;
+    font-size:.72rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--tinta-suave);
+    text-align:center;
+  }
+  .brasao{
+    width:64px;height:64px;margin:18px auto 14px;display:block;
+  }
+  h1{
+    font-family:'Libre Caslon Text',serif;
+    font-size:clamp(1.7rem,5.4vw,2.7rem);
+    line-height:1.12;
+    text-align:center;
+    letter-spacing:.01em;
+    margin-bottom:6px;
+  }
+  .subtitulo{
+    text-align:center;
+    font-style:italic;
+    color:var(--tinta-suave);
+    font-size:1.02rem;
+    max-width:46ch;
+    margin:0 auto;
+  }
+  .dados-evento{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;
+    margin:26px 0 8px;
+    font-family:'Special Elite',monospace;
+    font-size:.85rem;letter-spacing:.06em;
+  }
+  .dados-evento span b{color:var(--carimbo)}
+  hr.selo{
+    border:0;height:1px;background:var(--linha);
+    margin:30px auto;position:relative;overflow:visible;
+  }
+  hr.selo::after{
+    content:"❦";
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    background:var(--papel);padding:0 14px;color:var(--tinta-suave);font-size:1rem;
+  }
+
+  .texto p{margin-bottom:1.05em;font-size:1.03rem}
+  .texto .destaque{font-weight:600}
+  .clausulas{margin:1.2em 0}
+  .clausula{
+    display:grid;grid-template-columns:auto 1fr;gap:14px;
+    padding:14px 0;border-top:1px dotted var(--linha);
+  }
+  .clausula:last-child{border-bottom:1px dotted var(--linha)}
+  .clausula .rotulo{
+    font-family:'Special Elite',monospace;
+    font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--carimbo-azul);padding-top:5px;white-space:nowrap;
+  }
+  .clausula p{margin:0;font-size:.98rem}
+
+  .aviso-horario{
+    text-align:center;
+    font-family:'Libre Caslon Text',serif;
+    font-size:1.15rem;font-weight:700;
+    margin:26px 0 4px;
+  }
+  .aviso-horario em{font-style:normal;border-bottom:3px double var(--carimbo)}
+
+  .lema{
+    text-align:center;font-style:italic;margin:26px 0 6px;color:var(--tinta-suave);
+  }
+  .lema b{color:var(--tinta)}
+
+  /* ===== RSVP ===== */
+  .rsvp{
+    margin-top:8px;
+    border:2px solid var(--tinta);
+    padding:clamp(20px,4vw,34px);
+    position:relative;
+    background:rgba(255,255,255,.28);
+  }
+  .rsvp h2{
+    font-family:'Libre Caslon Text',serif;
+    font-size:1.45rem;text-align:center;margin-bottom:4px;
+  }
+  .prazo{
+    text-align:center;font-family:'Special Elite',monospace;
+    font-size:.8rem;letter-spacing:.1em;color:var(--carimbo);
+    text-transform:uppercase;margin-bottom:22px;
+  }
+  label{
+    display:block;font-family:'Special Elite',monospace;
+    font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--tinta-suave);margin:16px 0 6px;
+  }
+  input[type=text], input[type=number], textarea, select{
+    width:100%;
+    background:transparent;
+    border:0;border-bottom:1.5px solid var(--tinta);
+    font-family:'Spectral',serif;font-size:1.05rem;color:var(--tinta);
+    padding:6px 2px;border-radius:0;
+  }
+  textarea{resize:vertical;min-height:56px}
+  input:focus, textarea:focus, select:focus{
+    outline:2px solid var(--carimbo-azul);outline-offset:3px;
+  }
+  .linha-dupla{display:grid;grid-template-columns:2fr 1fr;gap:22px}
+  @media(max-width:520px){.linha-dupla{grid-template-columns:1fr}}
+  .check{
+    display:flex;align-items:flex-start;gap:10px;margin-top:18px;
+    font-size:.95rem;font-style:italic;color:var(--tinta-suave);
+  }
+  .check input{width:18px;height:18px;margin-top:3px;accent-color:var(--carimbo)}
+  .check label{margin:0;font-family:'Spectral',serif;text-transform:none;letter-spacing:0;font-size:.95rem;color:var(--tinta-suave)}
+
+  button.confirmar{
+    display:block;width:100%;margin-top:26px;
+    background:var(--tinta);color:var(--papel);
+    font-family:'Libre Caslon Text',serif;font-size:1.1rem;font-weight:700;
+    letter-spacing:.06em;
+    border:0;padding:15px;cursor:pointer;
+    transition:transform .08s ease, background .2s;
+  }
+  button.confirmar:hover{background:var(--carimbo)}
+  button.confirmar:active{transform:scale(.99)}
+  button.confirmar:disabled{opacity:.5;cursor:wait}
+  button.confirmar:focus-visible{outline:3px solid var(--carimbo);outline-offset:3px}
+
+  .erro{color:var(--carimbo);font-size:.9rem;margin-top:10px;display:none;text-align:center}
+
+  /* stamp */
+  .carimbo-stamp{
+    position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(243,234,216,.82);z-index:5;
+  }
+  .carimbo-stamp.ativo{display:flex}
+  .stamp-inner{
+    border:5px double var(--carimbo);color:var(--carimbo);
+    font-family:'Special Elite',monospace;text-transform:uppercase;
+    text-align:center;padding:18px 26px;letter-spacing:.14em;
+    transform:rotate(-8deg) scale(1);
+    font-size:1rem;line-height:1.5;
+    background:transparent;
+    animation:bater .45s cubic-bezier(.2,2.2,.4,1) both;
+    max-width:88%;
+  }
+  .stamp-inner small{display:block;font-size:.62rem;letter-spacing:.2em;margin-top:6px;color:var(--carimbo-azul)}
+  @keyframes bater{
+    0%{transform:rotate(-8deg) scale(2.4);opacity:0}
+    60%{transform:rotate(-8deg) scale(.96);opacity:1}
+    100%{transform:rotate(-8deg) scale(1);opacity:1}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .stamp-inner{animation:none}
+  }
+
+  /* lista */
+  .lista-secao{margin-top:34px}
+  .lista-secao h3{
+    font-family:'Special Elite',monospace;font-size:.78rem;
+    letter-spacing:.2em;text-transform:uppercase;text-align:center;
+    color:var(--tinta-suave);margin-bottom:4px;
+  }
+  .contador{
+    text-align:center;font-family:'Libre Caslon Text',serif;
+    font-size:2.2rem;font-weight:700;margin-bottom:14px;
+  }
+  .contador span{font-size:.85rem;font-family:'Special Elite',monospace;font-weight:400;letter-spacing:.12em;color:var(--tinta-suave);display:block}
+  ul.confirmados{list-style:none}
+  ul.confirmados li{
+    display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    padding:9px 2px;border-bottom:1px dotted var(--linha);
+    font-size:1rem;
+  }
+  ul.confirmados li .nome{font-weight:600}
+  ul.confirmados li .meta{
+    font-family:'Special Elite',monospace;font-size:.7rem;
+    letter-spacing:.08em;color:var(--tinta-suave);text-align:right;white-space:nowrap;
+  }
+  ul.confirmados li .meta .duelo{color:var(--chopp)}
+  .vazio{
+    text-align:center;font-style:italic;color:var(--tinta-suave);padding:18px 0;
+  }
+  .carregando{text-align:center;font-family:'Special Elite',monospace;font-size:.75rem;letter-spacing:.15em;color:var(--tinta-suave);padding:14px 0}
+
+  .disclaimer{
+    margin-top:34px;font-size:.78rem;font-style:italic;color:var(--tinta-suave);
+    border-top:1px solid var(--linha);padding-top:14px;text-align:center;
+  }
+  .assinatura{
+    margin-top:30px;text-align:center;
+  }
+  .assinatura .traço{width:220px;border-top:1px solid var(--tinta);margin:0 auto 6px}
+  .assinatura .cargo{font-family:'Special Elite',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave)}
+</style>
+</head>
+<body>
+
+<div class="documento">
+  <div class="moldura">
+
+    <p class="eyebrow">República da Farra — Comarca de Rio Claro e Região</p>
+
+    <svg class="brasao" viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" fill="none" stroke="#26221c" stroke-width="2"/>
+      <circle cx="32" cy="32" r="25" fill="none" stroke="#26221c" stroke-width="1"/>
+      <path d="M18 38 Q32 50 46 38 L44 30 Q32 40 20 30 Z" fill="#2b1e17"/>
+      <ellipse cx="32" cy="29" rx="13" ry="4" fill="none" stroke="#26221c" stroke-width="1.5"/>
+      <path d="M26 20 q1 -5 4 -6 M32 19 q1 -5 4 -6 M38 20 q1 -5 4 -6" fill="none" stroke="#a32020" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+    <p class="eyebrow" style="margin-bottom:10px">Edital Nº 002/2026</p>
+    <h1>Segunda Feijoada<br>na Fazenda</h1>
+    <p class="subtitulo">Sob o pretexto oficial de comemorar os aniversários do Japonês e do Barbudinho</p>
+
+    <div class="dados-evento">
+      <span>📅 <b>08 de agosto</b></span>
+      <span>🕛 início às <b>12h00</b></span>
+      <span>📍 <b>A Fazenda</b></span>
+    </div>
+
+    <hr class="selo">
+
+    <div class="texto">
+      <p>No dia 08 de agosto, a Fazenda reabre seus portões para a segunda edição de um evento que, na primeira vez, ainda era chamado de “feijoada”. Hoje, tecnicamente, já podemos tratar como <span class="destaque">patrimônio histórico e cultural da metrópole de Rio Claro e região</span>.</p>
+      <p>A primeira edição foi o piloto. A segunda em diante já é parte de uma ainda jovem tradição.</p>
+      <p>Mais uma vez, a Fazenda será palco de uma celebração sem precedentes, reunindo amigos, agregados, familiares adeptos da farra e demais cidadãos previamente aprovados pelo conselho.</p>
+    </div>
+
+    <div class="clausulas">
+      <div class="clausula">
+        <span class="rotulo">Art. 1º — Feijoada</span>
+        <p>Pilotada pelo nosso maçom favorito, guardião da panela e responsável por transformar esse evento em memória.</p>
+      </div>
+      <div class="clausula">
+        <span class="rotulo">Art. 2º — Chopp</span>
+        <p>Em escala preocupante, com a tradicional premiação moral, simbólica e juridicamente inexistente para quem conseguir beber mais que o Gustavo Falcão.</p>
+      </div>
+      <div class="clausula">
+        <span class="rotulo">Art. 3º — Música</span>
+        <p>De qualidade, ou pelo menos música. A curadoria ainda está em aberto, mas trabalha-se com cenários que vão de karaoke performático dos presentes a manifestações sonoras não homologadas pela Anvisa (havendo uma grande intersecção entre as duas).</p>
+      </div>
+      <div class="clausula">
+        <span class="rotulo">Art. 4º — Ambiente</span>
+        <p>Familiar no início, rural no meio e antropológico no final.</p>
+      </div>
+    </div>
+
+    <p class="aviso-horario">Começamos às 12h00 em ponto. <em>Não cheguem tarde!</em></p>
+
+    <p class="lema">A primeira foi história.<br><b>A segunda é jurisprudência.</b></p>
+
+    <hr class="selo">
+
+    <!-- ===== RSVP ===== -->
+    <section class="rsvp" id="rsvp">
+      <div class="carimbo-stamp" id="stamp" role="status">
+        <div class="stamp-inner">
+          Presença confirmada<br>Deferido pelo conselho
+          <small id="stampNome"></small>
+        </div>
+      </div>
+
+      <h2>Confirmação de Presença</h2>
+      <p class="prazo" id="prazo">Prazo protocolar: 15 de julho</p>
+
+      <form id="formRsvp" novalidate>
+        <div class="linha-dupla">
+          <div>
+            <label for="nome">Nome do(a) cidadão(ã)</label>
+            <input type="text" id="nome" maxlength="60" autocomplete="name" placeholder="Como consta nos autos" required>
+          </div>
+          <div>
+            <label for="acomp">Total de pessoas (você incluso)</label>
+            <input type="number" id="acomp" min="1" max="15" value="1" required>
+          </div>
+        </div>
+
+        <label for="obs">Observações ao conselho <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+        <textarea id="obs" maxlength="200" placeholder="Restrições alimentares, pedidos de música não homologada, etc."></textarea>
+
+        <div class="check">
+          <input type="checkbox" id="duelo">
+          <label for="duelo">Declaro, sob as penas da ressaca, a intenção de disputar o título de quem bebe mais que o Gustavo Falcão.</label>
+        </div>
+
+        <button type="submit" class="confirmar" id="btnConfirmar">Protocolar presença</button>
+        <p class="erro" id="erro"></p>
+      </form>
+
+      <div class="lista-secao">
+        <h3>Autos do processo — confirmados até o momento</h3>
+        <div class="contador" id="contador">—<span>pessoas confirmadas</span></div>
+        <div class="carregando" id="carregando">Consultando o cartório…</div>
+        <ul class="confirmados" id="lista"></ul>
+        <p class="vazio" id="vazio" style="display:none">Nenhuma confirmação protocolada ainda. Seja a jurisprudência.</p>
+      </div>
+    </section>
+
+    <div class="assinatura">
+      <div class="traço"></div>
+      <p class="cargo">O Conselho Organizador</p>
+    </div>
+
+    <p class="disclaimer">Disclaimer: este convite foi gerado com auxílio de inteligência artificial. O organizador recomenda beber com responsabilidade, consultar um profissional qualificado antes de ingerir feijoada em ambiente rural e verificar as leis locais aplicáveis ao consumo recreativo de chopp. As confirmações são públicas para todos os convidados que acessarem esta página.</p>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  // ===== Backend Supabase (lista de confirmados compartilhada e persistente) =====
+  const SUPABASE_URL = 'https://bkmsclqtamlsuogtmlzr.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrbXNjbHF0YW1sc3VvZ3RtbHpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzODYzMTgsImV4cCI6MjA4Nzk2MjMxOH0.zyqcsmJjWMiBwmuLHlfUaX0CW3k2a9j-sTT4_KWV7O8';
+  const API = SUPABASE_URL + '/rest/v1/feijoada_rsvp';
+  const HEADERS = { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Content-Type': 'application/json' };
+
+  const form = document.getElementById('formRsvp');
+  const nome = document.getElementById('nome');
+  const acomp = document.getElementById('acomp');
+  const obs = document.getElementById('obs');
+  const duelo = document.getElementById('duelo');
+  const btn = document.getElementById('btnConfirmar');
+  const erro = document.getElementById('erro');
+  const lista = document.getElementById('lista');
+  const vazio = document.getElementById('vazio');
+  const carregando = document.getElementById('carregando');
+  const contador = document.getElementById('contador');
+  const stamp = document.getElementById('stamp');
+  const stampNome = document.getElementById('stampNome');
+
+  function mostrarErro(msg){
+    erro.textContent = msg;
+    erro.style.display = 'block';
+    setTimeout(()=>{ erro.style.display='none'; }, 5000);
+  }
+
+  function escapar(s){
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  async function carregarConfirmados(){
+    try{
+      const res = await fetch(API + '?select=nome,pessoas,duelo,criado_em&order=criado_em.asc', { headers: HEADERS });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const dados = await res.json();
+      const registros = dados.map(r => ({
+        nome: r.nome,
+        pessoas: r.pessoas,
+        duelo: r.duelo,
+        criadoEm: new Date(r.criado_em).getTime()
+      }));
+      renderizar(registros);
+    }catch(e){
+      carregando.textContent = 'Não foi possível consultar o cartório. Verificando novamente…';
+      carregando.style.display = 'block';
+    }
+  }
+
+  function renderizar(registros){
+    carregando.style.display = 'none';
+    lista.innerHTML = '';
+    if(!registros.length){
+      vazio.style.display = 'block';
+      contador.firstChild.textContent = '0';
+      return;
+    }
+    vazio.style.display = 'none';
+    let totalPessoas = 0;
+    for(const r of registros){
+      const pessoas = Math.max(1, parseInt(r.pessoas,10) || 1);
+      totalPessoas += pessoas;
+      const li = document.createElement('li');
+      const extras = pessoas > 1 ? `+${pessoas-1} acompanhante${pessoas-1>1?'s':''}` : 'solo';
+      li.innerHTML = `<span class="nome">${escapar(r.nome)}</span>
+        <span class="meta">${extras}${r.duelo ? ' · <span class="duelo">⚔️ desafia o Falcão</span>' : ''}</span>`;
+      lista.appendChild(li);
+    }
+    contador.firstChild.textContent = String(totalPessoas);
+  }
+
+  form.addEventListener('submit', async function(ev){
+    ev.preventDefault();
+    const n = nome.value.trim();
+    const p = parseInt(acomp.value,10);
+    if(!n){ mostrarErro('O conselho exige um nome para os autos.'); nome.focus(); return; }
+    if(!p || p < 1 || p > 15){ mostrarErro('Informe entre 1 e 15 pessoas. Acima disso, protocolar ofício separado.'); acomp.focus(); return; }
+
+    const registro = {
+      nome: n.slice(0,60),
+      pessoas: p,
+      obs: obs.value.trim().slice(0,200),
+      duelo: duelo.checked
+    };
+
+    btn.disabled = true;
+    btn.textContent = 'Protocolando…';
+
+    try{
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: Object.assign({ 'Prefer': 'return=minimal' }, HEADERS),
+        body: JSON.stringify(registro)
+      });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+    }catch(e){
+      btn.disabled = false;
+      btn.textContent = 'Protocolar presença';
+      mostrarErro('O cartório está fora do ar. Tente novamente em instantes.');
+      return;
+    }
+
+    stampNome.textContent = registro.nome.toUpperCase();
+    stamp.classList.add('ativo');
+    setTimeout(()=>{ stamp.classList.remove('ativo'); }, 2600);
+
+    form.reset();
+    acomp.value = 1;
+    btn.disabled = false;
+    btn.textContent = 'Protocolar presença';
+    await carregarConfirmados();
+  });
+
+  // prazo
+  (function(){
+    const prazoEl = document.getElementById('prazo');
+    const limite = new Date(2026, 6, 15, 23, 59, 59); // 15/07/2026
+    const agora = new Date();
+    const dias = Math.ceil((limite - agora) / 86400000);
+    if(dias > 1){
+      prazoEl.textContent = 'Prazo protocolar: 15 de julho — restam ' + dias + ' dias';
+    } else if(dias === 1){
+      prazoEl.textContent = 'Prazo protocolar: 15 de julho — último dia!';
+    } else {
+      prazoEl.textContent = 'Prazo protocolar expirado — confirmação sujeita a deferimento extraordinário do conselho';
+    }
+  })();
+
+  carregarConfirmados();
+  // atualiza a lista periodicamente para captar novas confirmações
+  setInterval(carregarConfirmados, 30000);
+})();
+</script>
+</body>
+</html>
