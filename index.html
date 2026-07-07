@@ -165,14 +165,44 @@
   input:focus, textarea:focus, select:focus{
     outline:2px solid var(--carimbo-azul);outline-offset:3px;
   }
-  .linha-dupla{display:grid;grid-template-columns:2fr 1fr;gap:22px}
-  @media(max-width:520px){.linha-dupla{grid-template-columns:1fr}}
-  .check{
-    display:flex;align-items:flex-start;gap:10px;margin-top:18px;
-    font-size:.95rem;font-style:italic;color:var(--tinta-suave);
+  .linha-dupla{display:grid;grid-template-columns:2fr 1fr;gap:22px;align-items:end}
+  @media(min-width:521px){.linha-dupla label{min-height:2.4rem}}
+  @media(max-width:520px){.linha-dupla{grid-template-columns:1fr;gap:0}.linha-dupla label{min-height:0}}
+
+  /* escolha segmentada Sim/Não */
+  .campo-escolha{margin-top:22px}
+  .escolha-label{
+    display:block;font-family:'Special Elite',monospace;
+    font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--tinta-suave);margin:0 0 9px;
   }
-  .check input{width:18px;height:18px;margin-top:3px;accent-color:var(--carimbo)}
-  .check label{margin:0;font-family:'Spectral',serif;text-transform:none;letter-spacing:0;font-size:.95rem;color:var(--tinta-suave)}
+  .escolha{position:relative;display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--tinta)}
+  .escolha input{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+  .escolha label{
+    margin:0;text-align:center;cursor:pointer;
+    font-family:'Spectral',serif;text-transform:none;letter-spacing:.01em;
+    font-size:.95rem;color:var(--tinta-suave);
+    padding:12px 8px;transition:background .15s,color .15s;user-select:none;
+  }
+  .escolha label:last-of-type{border-left:1.5px solid var(--tinta)}
+  .escolha input:checked + label{background:var(--tinta);color:var(--papel);font-weight:600}
+  #dueloSim:checked + label{background:var(--carimbo);color:#fff}
+  #barbaSim:checked + label{background:var(--carimbo-azul);color:#fff}
+  .escolha input:focus-visible + label{outline:2px solid var(--carimbo-azul);outline-offset:-2px}
+
+  /* enquete de resultados */
+  .enquete{margin-top:26px;border-top:1px dotted var(--linha);padding-top:18px}
+  .enquete h3{
+    font-family:'Special Elite',monospace;font-size:.78rem;
+    letter-spacing:.2em;text-transform:uppercase;text-align:center;
+    color:var(--tinta-suave);margin-bottom:12px;
+  }
+  .enquete-barras{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .voto{border:1.5px solid var(--tinta);padding:12px 8px;text-align:center}
+  .voto-num{display:block;font-family:'Libre Caslon Text',serif;font-size:1.9rem;font-weight:700;line-height:1}
+  .voto-cap{display:block;font-family:'Special Elite',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-suave);margin-top:6px}
+  .voto-sim .voto-num{color:var(--carimbo-azul)}
+  .voto-nao .voto-num{color:var(--carimbo)}
 
   button.confirmar{
     display:block;width:100%;margin-top:26px;
@@ -340,9 +370,24 @@
         <label for="obs">Observações ao conselho <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
         <textarea id="obs" maxlength="200" placeholder="Restrições alimentares, pedidos de música não homologada, etc."></textarea>
 
-        <div class="check">
-          <input type="checkbox" id="duelo">
-          <label for="duelo">Declaro, sob as penas da ressaca, a intenção de disputar o título de quem bebe mais que o Gustavo Falcão.</label>
+        <div class="campo-escolha">
+          <span class="escolha-label">Disputa o título de quem bebe mais que o Gustavo Falcão?</span>
+          <div class="escolha" role="radiogroup" aria-label="Duelo do Falcão">
+            <input type="radio" name="duelo" id="dueloNao" value="nao" checked>
+            <label for="dueloNao">Prefiro assistir</label>
+            <input type="radio" name="duelo" id="dueloSim" value="sim">
+            <label for="dueloSim">⚔️ Aceito o duelo</label>
+          </div>
+        </div>
+
+        <div class="campo-escolha">
+          <span class="escolha-label">Aposta do conselho: o Thiago Bóbbo vai aparecer de barba?</span>
+          <div class="escolha" role="radiogroup" aria-label="Aposta da barba do Thiago Bóbbo">
+            <input type="radio" name="barba" id="barbaSim" value="sim">
+            <label for="barbaSim">🧔 Sim, de barba</label>
+            <input type="radio" name="barba" id="barbaNao" value="nao">
+            <label for="barbaNao">Não, vai raspar</label>
+          </div>
         </div>
 
         <button type="submit" class="confirmar" id="btnConfirmar">Protocolar presença</button>
@@ -355,6 +400,14 @@
         <div class="carregando" id="carregando">Consultando o cartório…</div>
         <ul class="confirmados" id="lista"></ul>
         <p class="vazio" id="vazio" style="display:none">Nenhuma confirmação protocolada ainda. Seja a jurisprudência.</p>
+
+        <div class="enquete" id="enquete" style="display:none">
+          <h3>Aposta: o Thiago Bóbbo vai de barba?</h3>
+          <div class="enquete-barras">
+            <div class="voto voto-sim"><span class="voto-num" id="barbaSimNum">0</span><span class="voto-cap">🧔 Sim, de barba</span></div>
+            <div class="voto voto-nao"><span class="voto-num" id="barbaNaoNum">0</span><span class="voto-cap">Não, vai raspar</span></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -380,7 +433,12 @@
   const nome = document.getElementById('nome');
   const acomp = document.getElementById('acomp');
   const obs = document.getElementById('obs');
-  const duelo = document.getElementById('duelo');
+  const dueloSim = document.getElementById('dueloSim');
+  const barbaSim = document.getElementById('barbaSim');
+  const barbaNao = document.getElementById('barbaNao');
+  const enquete = document.getElementById('enquete');
+  const barbaSimNum = document.getElementById('barbaSimNum');
+  const barbaNaoNum = document.getElementById('barbaNaoNum');
   const btn = document.getElementById('btnConfirmar');
   const erro = document.getElementById('erro');
   const lista = document.getElementById('lista');
@@ -404,13 +462,14 @@
 
   async function carregarConfirmados(){
     try{
-      const res = await fetch(API + '?select=nome,pessoas,duelo,criado_em&order=criado_em.asc', { headers: HEADERS });
+      const res = await fetch(API + '?select=nome,pessoas,duelo,barba,criado_em&order=criado_em.asc', { headers: HEADERS });
       if(!res.ok) throw new Error('HTTP ' + res.status);
       const dados = await res.json();
       const registros = dados.map(r => ({
         nome: r.nome,
         pessoas: r.pessoas,
         duelo: r.duelo,
+        barba: r.barba,
         criadoEm: new Date(r.criado_em).getTime()
       }));
       renderizar(registros);
@@ -420,12 +479,21 @@
     }
   }
 
+  function renderizarEnquete(registros){
+    const sim = registros.filter(r => r.barba === true).length;
+    const nao = registros.filter(r => r.barba === false).length;
+    barbaSimNum.textContent = String(sim);
+    barbaNaoNum.textContent = String(nao);
+    enquete.style.display = (sim + nao) > 0 ? 'block' : 'none';
+  }
+
   function renderizar(registros){
     carregando.style.display = 'none';
     lista.innerHTML = '';
     if(!registros.length){
       vazio.style.display = 'block';
       contador.firstChild.textContent = '0';
+      renderizarEnquete(registros);
       return;
     }
     vazio.style.display = 'none';
@@ -440,6 +508,7 @@
       lista.appendChild(li);
     }
     contador.firstChild.textContent = String(totalPessoas);
+    renderizarEnquete(registros);
   }
 
   form.addEventListener('submit', async function(ev){
@@ -453,7 +522,8 @@
       nome: n.slice(0,60),
       pessoas: p,
       obs: obs.value.trim().slice(0,200),
-      duelo: duelo.checked
+      duelo: dueloSim.checked,
+      barba: barbaSim.checked ? true : (barbaNao.checked ? false : null)
     };
 
     btn.disabled = true;
