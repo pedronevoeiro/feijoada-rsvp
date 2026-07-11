@@ -230,6 +230,18 @@
 
   .erro{color:var(--carimbo);font-size:.9rem;margin-top:10px;display:none;text-align:center}
 
+  /* bloco pós-cadastro: convite para protocolar outra pessoa */
+  .pos-cadastro{text-align:center;padding:6px 0 2px}
+  .pos-cadastro .pos-msg{
+    font-family:'Libre Caslon Text',serif;font-size:1.15rem;margin-bottom:6px;
+  }
+  .pos-cadastro .pos-msg b{color:var(--carimbo)}
+  .pos-cadastro .pos-sub{
+    font-style:italic;color:var(--tinta-suave);font-size:.95rem;margin-bottom:18px;
+  }
+  button.confirmar.outra{background:var(--carimbo-azul);margin-top:0}
+  button.confirmar.outra:hover{background:var(--tinta)}
+
   /* stamp */
   .carimbo-stamp{
     position:absolute;inset:0;display:none;align-items:center;justify-content:center;
@@ -280,6 +292,11 @@
     letter-spacing:.08em;color:var(--tinta-suave);text-align:right;white-space:nowrap;
   }
   ul.confirmados li .meta .duelo{color:var(--chopp)}
+  @media(max-width:560px){
+    ul.confirmados li{flex-direction:column;align-items:flex-start;gap:3px}
+    ul.confirmados li .nome{width:100%}
+    ul.confirmados li .meta{text-align:left;white-space:normal}
+  }
   .vazio{
     text-align:center;font-style:italic;color:var(--tinta-suave);padding:18px 0;
   }
@@ -365,15 +382,15 @@
 
       <h2>Confirmação de Presença</h2>
       <p class="prazo" id="prazo">Prazo protocolar: 15 de julho</p>
-      <p class="instrucao">Atenção do cartório: <b>um cadastro por pessoa</b>. Cada convidado protocola a própria presença — não confirme pelos outros.</p>
+      <p class="instrucao">Atenção do cartório: <b>um cadastro por pessoa</b>. Se for protocolar por mais alguém, faça um cadastro separado para cada convidado.</p>
 
       <form id="formRsvp" novalidate>
         <label for="nome">Nome do(a) cidadão(ã)</label>
         <input type="text" id="nome" maxlength="60" autocomplete="name" placeholder="Como consta nos autos" required>
 
         <label for="bebida">No bar, você é do time do…</label>
-        <select id="bebida">
-          <option value="" selected>Selecione (opcional)</option>
+        <select id="bebida" required>
+          <option value="" selected disabled>Selecione…</option>
           <option value="cerveja">🍺 Cerveja</option>
           <option value="drinks">🍸 Drinks</option>
           <option value="ambos">Os dois</option>
@@ -383,7 +400,7 @@
         <div class="campo-escolha">
           <span class="escolha-label">Disputa o título de quem bebe mais que o Gustavo Falcão?</span>
           <div class="escolha" role="radiogroup" aria-label="Duelo do Falcão">
-            <input type="radio" name="duelo" id="dueloNao" value="nao" checked>
+            <input type="radio" name="duelo" id="dueloNao" value="nao">
             <label for="dueloNao">Prefiro assistir</label>
             <input type="radio" name="duelo" id="dueloSim" value="sim">
             <label for="dueloSim">⚔️ Aceito o duelo</label>
@@ -410,12 +427,18 @@
           </div>
         </div>
 
-        <label for="obs">Observações ao conselho <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
-        <textarea id="obs" maxlength="200" placeholder="Restrições alimentares, pedidos de música não homologada, etc."></textarea>
+        <label for="obs">Observações ao conselho</label>
+        <textarea id="obs" maxlength="200" required placeholder="Restrições alimentares, pedidos de música não homologada, etc."></textarea>
 
         <button type="submit" class="confirmar" id="btnConfirmar">Protocolar presença</button>
         <p class="erro" id="erro"></p>
       </form>
+
+      <div class="pos-cadastro" id="posCadastro" style="display:none">
+        <p class="pos-msg">Presença de <b id="posNome"></b> protocolada.</p>
+        <p class="pos-sub">Vai protocolar o cadastro para mais alguém?</p>
+        <button type="button" class="confirmar outra" id="btnOutra">Cadastrar outra pessoa</button>
+      </div>
 
       <div class="lista-secao">
         <h3>Autos do processo — confirmados até o momento</h3>
@@ -489,6 +512,10 @@
   const contador = document.getElementById('contador');
   const stamp = document.getElementById('stamp');
   const stampNome = document.getElementById('stampNome');
+  const posCadastro = document.getElementById('posCadastro');
+  const posNome = document.getElementById('posNome');
+  const btnOutra = document.getElementById('btnOutra');
+  const rsvp = document.getElementById('rsvp');
 
   function mostrarErro(msg){
     erro.textContent = msg;
@@ -500,6 +527,16 @@
     const d = document.createElement('div');
     d.textContent = s;
     return d.innerHTML;
+  }
+
+  // padroniza a capitalização dos nomes (caixa alta/baixa viram Título)
+  const CONECTIVOS = new Set(['de','da','do','dos','das','e','di','du','del','van','von']);
+  function titularizar(nome){
+    return String(nome).trim().toLowerCase().split(/\s+/).map(function(p, i){
+      if(!p) return p;
+      if(i > 0 && CONECTIVOS.has(p)) return p;
+      return p.charAt(0).toUpperCase() + p.slice(1);
+    }).join(' ');
   }
 
   async function carregarConfirmados(){
@@ -574,7 +611,7 @@
       if(r.bebida && BEBIDA_EMOJI[r.bebida]) partes.push(BEBIDA_EMOJI[r.bebida]);
       if(pessoas > 1) partes.push(`+${pessoas-1} acompanhante${pessoas-1>1?'s':''}`);
       if(r.duelo) partes.push('<span class="duelo">⚔️ desafia o Falcão</span>');
-      li.innerHTML = `<span class="nome">${escapar(r.nome)}</span>
+      li.innerHTML = `<span class="nome">${escapar(titularizar(r.nome))}</span>
         <span class="meta">${partes.join(' · ')}</span>`;
       lista.appendChild(li);
     }
@@ -587,14 +624,28 @@
     const n = nome.value.trim();
     if(!n){ mostrarErro('O conselho exige um nome para os autos.'); nome.focus(); return; }
 
+    if(!bebida.value){ mostrarErro('Declare sua preferência no bar — o cartório precisa saber.'); bebida.focus(); return; }
+
+    const dueloResp = form.querySelector('input[name="duelo"]:checked');
+    if(!dueloResp){ mostrarErro('Aceita ou não o duelo contra o Falcão? Decida-se.'); return; }
+
+    const karaokeResp = form.querySelector('input[name="karaoke"]:checked');
+    if(!karaokeResp){ mostrarErro('A favor ou contra o karaokê? O conselho exige posicionamento.'); return; }
+
+    const thiagoResp = form.querySelector('input[name="thiago"]:checked');
+    if(!thiagoResp){ mostrarErro('Faça sua aposta: o Thiago Bóbbo vai aparecer?'); return; }
+
+    const obsTexto = obs.value.trim();
+    if(!obsTexto){ mostrarErro('Deixe ao menos uma palavra nas observações ao conselho.'); obs.focus(); return; }
+
     const registro = {
       nome: n.slice(0,60),
       pessoas: 1,
-      obs: obs.value.trim().slice(0,200),
-      bebida: bebida.value || null,
-      duelo: dueloSim.checked,
-      karaoke: karaokeSim.checked ? true : (karaokeNao.checked ? false : null),
-      thiago: thiagoSim.checked ? true : (thiagoNao.checked ? false : null)
+      obs: obsTexto.slice(0,200),
+      bebida: bebida.value,
+      duelo: dueloResp.value === 'sim',
+      karaoke: karaokeResp.value === 'sim',
+      thiago: thiagoResp.value === 'sim'
     };
 
     btn.disabled = true;
@@ -616,12 +667,29 @@
 
     stampNome.textContent = registro.nome.toUpperCase();
     stamp.classList.add('ativo');
-    setTimeout(()=>{ stamp.classList.remove('ativo'); }, 2600);
 
     form.reset();
     btn.disabled = false;
     btn.textContent = 'Protocolar presença';
+    posNome.textContent = titularizar(registro.nome);
+
+    // deixa o carimbo tocar sobre o formulário e só depois revela o convite
+    setTimeout(()=>{
+      stamp.classList.remove('ativo');
+      form.style.display = 'none';
+      posCadastro.style.display = 'block';
+    }, 2600);
+
     await carregarConfirmados();
+  });
+
+  // "Cadastrar outra pessoa" — volta o formulário limpo para um novo protocolo
+  btnOutra.addEventListener('click', function(){
+    posCadastro.style.display = 'none';
+    form.style.display = '';
+    form.reset();
+    nome.focus();
+    rsvp.scrollIntoView({ behavior:'smooth', block:'start' });
   });
 
   // prazo
